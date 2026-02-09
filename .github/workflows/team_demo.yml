@@ -7,30 +7,30 @@ name: team demo
 on:
   workflow_dispatch:
   #inputs the workflow accepts
-  inputs:
-    name:
-      #friendly description to be shown in the Ui instead of 'name'
-      description: "Favorite City"
-      #Default value if no value is explicitly provided
-      default: "Japan"
-      #Input that has to be provided for the workflow to run
-      required: true
-      # Input Type (string, choice, boolean)
-      type: string
-    city:
-      description: "Person to greet"
-      required: true
-      type: choice
-      options: 
-        -New York
-        -Chicago
-        -Los Angeles
-    fav-color-blue:
-      description: "Is your favorite color blue?"
-      required: true
-      type: boolean
+    inputs:
+      name:
+        #friendly description to be shown in the Ui instead of 'name'
+        description: "Favorite City"
+        #Default value if no value is explicitly provided
+        default: "Japan"
+        #Input that has to be provided for the workflow to run
+        required: true
+        # Input Type (string, choice, boolean)
+        type: string
+      city:
+        description: "Person to greet"
+        required: true
+        type: choice
+        options: 
+          - New York
+          - Chicago
+          - Los Angeles
+      fav-color-blue:
+        description: "Is your favorite color blue?"
+        required: true
+        type: boolean
     #A workflow is made out of 1 or more jobs that can run sequntially or in parelle
-  jobs:
+jobs:
     #This workflow contains a single job called greet
     greet:
     #display name for the job
@@ -38,7 +38,7 @@ on:
       runs-on: 
       - ubuntu-latest
     #Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
+      steps:
       - name: Send greeting
         run: |
           echo "Hello ${{ github.event.inputs.name }}"
