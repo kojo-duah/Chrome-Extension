@@ -40,9 +40,9 @@ on:
     #Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Send greeting
-      run: |
-        echo "Hello ${{ github.event.inputs.name }}"
-        echo "Your favorite city is ${{ github.event.inputs.city }}"
-        echo "Hello ${{ github.event.inputs.fav-color-blue }}"
+        run: |
+          echo "Hello ${{ github.event.inputs.name }}"
+          echo "Your favorite city is ${{ github.event.inputs.city }}"
+          echo "Is your favorite color blue: ${{ github.event.inputs.fav-color-blue }}" 
         
     
