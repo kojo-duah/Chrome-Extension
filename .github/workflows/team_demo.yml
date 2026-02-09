@@ -34,8 +34,8 @@ on:
     #This workflow contains a single job called greet
     greet:
     #display name for the job
-    name: "Greetings, Program"
-    runs-on: 
+      name: "Greetings, Program"
+      runs-on: 
       - ubuntu-latest
     #Steps represent a sequence of tasks that will be executed as part of the job
     steps:
