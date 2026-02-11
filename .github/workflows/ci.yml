@@ -13,6 +13,10 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: "JavaScript Files"
+
     strategy:
       matrix:
         node-version: [20.x]
