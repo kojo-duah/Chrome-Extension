@@ -1,9 +1,7 @@
-const hello = "Hello, World!";
-
-const helloFunction = () => {
-    console.log(hello);
-};
-
-helloFunction();
-
-export { helloFunction };
+["darkGroup", "lightGroup", "spaceGroup"].forEach(group => {
+    document.getElementById(group).addEventListener("click", () => {
+        chrome.storage.sync.set({ activeTheme: group }, () => {
+            window.close();
+        });
+    });
+});
