@@ -17,7 +17,8 @@
       "js": [
         "themes.js",
         "content.js"
-      ]
+      ],
+      "type": "module"
     }
   ]
 }

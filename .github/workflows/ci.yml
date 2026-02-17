@@ -5,7 +5,7 @@ name: Chrome-Extention CI (Node)
 
 on:
   push:
-    branches: ["**"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
