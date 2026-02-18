@@ -1,4 +1,4 @@
-const THEMES = {
+export const THEMES = {
     darkGroup: {
         backgroundImage: "assets/dark.jpg",
         textColor: "white"

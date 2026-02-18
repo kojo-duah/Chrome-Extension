@@ -15,9 +15,9 @@
         "<all_urls>"
       ],
       "js": [
-        "themes.js",
         "content.js"
-      ]
+      ],
+      "type": "module"
     }
   ]
 }

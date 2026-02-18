@@ -1,3 +1,4 @@
+import { THEMES } from "./themes.js";
 function applyTheme(theme) {
     if (!theme) return;
 
