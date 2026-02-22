@@ -1,9 +1,29 @@
 {
-  "manifest_version": 3,
-  "name": "Chromiunm",
+  "name": "Theme Maker",
   "version": "0.1.0",
-  "description": "Basic Chromiunm extension",
+  "manifest_version": 3,
+  "description": "Theme customization extension",
+
+  "permissions": [
+    "storage"
+  ],
+  
+
+  "action": {
+    "default_popup": "popup.html"
+  },
+  
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  
   "background": {
-    "service_worker": "Chromiunm.js"
+    "service_worker": "background.js"
   }
+
+  
+
 }
