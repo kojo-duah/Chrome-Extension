@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Theme Switcher</title>
+    <style>
+        :root {
+            /* Graphic UI Palette (图形 UI 配色) */
+            --bg-matte: #0B0B0C;
+            --panel-bg: #141416;
+            --panel-hover: #1A1A1C;
+            
+            --electric-yellow: #E6FF00;
+            --hot-pink: #FF0055;
+            --soft-white: #F4F4F4;
+            --text-dim: #7A7A85;
+            --status-red: #FF3344;
+            
+            --grid-color: rgba(255, 255, 255, 0.025);
+            --line-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body { 
+            width: 280px; 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--bg-matte);
+            color: var(--soft-white);
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Subtle Static Grid (微妙的静态网格) */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 24px 24px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Main Wrapper */
+        .ui-wrapper {
+            padding: 24px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* System Header - Subtle & Alive (系统头部 - 微妙且生动) */
+        .sys-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        /* Soft Red Pulsing Status Light (柔和闪烁的红色状态灯) */
+        .status-dot {
+            width: 6px; 
+            height: 6px;
+            background-color: var(--status-red);
+            border-radius: 50%;
+            animation: soft-pulse-red 3s ease-in-out infinite;
+        }
+
+        @keyframes soft-pulse-red {
+            0%, 100% { opacity: 0.3; box-shadow: 0 0 2px rgba(255, 51, 68, 0.2); }
+            50% { opacity: 1; box-shadow: 0 0 8px rgba(255, 51, 68, 0.7); }
+        }
+
+        .status-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        /* Typography: Clean Main Title (排版：干净的主标题) */
+        .title-group {
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .main-title {
+            margin: 0;
+            font-family: 'Arial Black', Impact, sans-serif;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            color: var(--soft-white);
+            text-shadow: 
+                1.5px 1px 0px rgba(230, 255, 0, 0.6), 
+                -1.5px -1px 0px rgba(255, 0, 85, 0.6);
+            line-height: 1.05;
+        }
+
+        /* Subtle Accent Marker (微妙的强调标记) */
+        .accent-marker {
+            width: 30px;
+            height: 3px;
+            background-color: var(--electric-yellow);
+            margin-top: 10px;
+            border-radius: 2px;
+        }
+
+        /* Interactive Panels (交互式面板) */
+        .module-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-module {
+            background-color: var(--panel-bg);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 14px 16px;
+            cursor: pointer;
+            text-align: left;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3), background-color 0.2s ease, border-color 0.2s ease;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+            overflow: hidden;
+        }
+
+        .btn-module::before {
+            content: "";
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background-color: var(--line-color);
+            transition: all 0.25s ease;
+        }
+
+        .btn-module::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+            transition: left 0.4s ease-out;
+            pointer-events: none;
+        }
+
+        .btn-module:hover::after {
+            left: 150%;
+        }
+
+        .btn-label {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--text-dim);
+            margin-bottom: 5px;
+            letter-spacing: 1.5px;
+            transition: color 0.2s ease;
+        }
+
+        .btn-text {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 13px;
+            color: var(--soft-white);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        /* Micro-interactions & Hover States (微交互与悬停状态) */
+        .btn-module:hover {
+            background-color: var(--panel-hover);
+            transform: translateX(4px); 
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        
+        .btn-module:hover .btn-text {
+            transform: translateX(2px);
+        }
+
+        .btn-module:active {
+            transform: translateX(2px) scale(0.98);
+        }
+
+        /* Hover Styles per module (每个模块的悬停样式) */
+        #btn-default:hover::before { background-color: var(--soft-white); width: 4px; }
+        #btn-default:hover .btn-label { color: var(--soft-white); }
+
+        #btn-matrix:hover::before { background-color: #00FF41; width: 4px; box-shadow: 0 0 8px rgba(0,255,65,0.3); }
+        #btn-matrix:hover .btn-label { color: #00FF41; }
+        
+        #btn-zzz:hover::before { background-color: var(--electric-yellow); width: 4px; box-shadow: 0 0 8px rgba(230,255,0,0.3); }
+        #btn-zzz:hover .btn-label { color: var(--electric-yellow); }
+
+        #btn-lofi:hover::before { background-color: var(--hot-pink); width: 4px; box-shadow: 0 0 8px rgba(255,0,85,0.3); }
+        #btn-lofi:hover .btn-label { color: var(--hot-pink); }
+
+
+        /* =========================================
+           ACTIVE MODULE STYLING & ANIMATIONS
+           (激活模块的样式与动画)
+           ========================================= */
+           
+        @keyframes activate-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02) translateX(4px); }
+            100% { transform: scale(1) translateX(0); }
+        }
+
+        @keyframes text-flash {
+            0% { opacity: 0; transform: translateX(-4px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .btn-module.active {
+            animation: activate-pop 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+        }
+        
+        .btn-module.active .btn-label {
+            animation: text-flash 0.3s ease-out forwards;
+        }
+
+        /* Active Colors (激活状态的颜色) */
+        #btn-default.active { background-color: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+        #btn-default.active::before { background-color: var(--soft-white); width: 4px; box-shadow: 0 0 8px rgba(255,255,255,0.3); }
+        #btn-default.active .btn-label { color: var(--soft-white); }
+
+        #btn-matrix.active { background-color: rgba(0,255,65,0.04); border-color: rgba(0,255,65,0.1); }
+        #btn-matrix.active::before { background-color: #00FF41; width: 4px; box-shadow: 0 0 8px rgba(0,255,65,0.3); }
+        #btn-matrix.active .btn-label { color: #00FF41; }
+
+        #btn-zzz.active { background-color: rgba(230, 255, 0, 0.04); border-color: rgba(230, 255, 0, 0.1); }
+        #btn-zzz.active::before { background-color: var(--electric-yellow); width: 4px; box-shadow: 0 0 10px rgba(230,255,0,0.4); }
+        #btn-zzz.active .btn-label { color: var(--electric-yellow); }
+
+        #btn-lofi.active { background-color: rgba(255,0,85,0.04); border-color: rgba(255,0,85,0.1); }
+        #btn-lofi.active::before { background-color: var(--hot-pink); width: 4px; box-shadow: 0 0 8px rgba(255,0,85,0.3); }
+        #btn-lofi.active .btn-label { color: var(--hot-pink); }
+
+    </style>
+</head>
+<body>
+    <div class="ui-wrapper">
+        
+        <!-- Subtle System Header -->
+        <div class="sys-header">
+            <div class="status-dot"></div>
+            <div class="status-label">SYS_STATE: IDLE</div>
+        </div>
+        
+        <!-- Clean Typography Hierarchy -->
+        <div class="title-group">
+            <h1 class="main-title">INTERFACE<br>MODE</h1>
+            <div class="accent-marker"></div>
+        </div>
+        
+        <!-- Stacked Module Panels (Added data-theme and data-label attributes) -->
+        <div class="module-list">
+            <button class="btn-module" id="btn-default" data-theme="default" data-label="MODULE_01">
+                <span class="btn-label">MODULE_01</span>
+                <span class="btn-text">STANDARD WEB</span>
+            </button>
+            
+            <button class="btn-module" id="btn-matrix" data-theme="matrix" data-label="MODULE_02">
+                <span class="btn-label">MODULE_02</span>
+                <span class="btn-text">THE MATRIX</span>
+            </button>
+            
+            <button class="btn-module" id="btn-zzz" data-theme="zzz" data-label="MODULE_03">
+                <span class="btn-label">MODULE_03</span>
+                <span class="btn-text">ASTRA YAO 耀佳音</span>
+            </button>
+            
+            <button class="btn-module" id="btn-lofi" data-theme="lofi" data-label="MODULE_04">
+                <span class="btn-label">MODULE_04</span>
+                <span class="btn-text">LOFI CHILL</span>
+            </button>
+        </div>
+
+        <!-- Custom Color Picker -->
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <div class="status-label" style="margin-bottom: 8px;">CUSTOM FONT COLOR (自定义字体颜色)</div>
+            <div style="display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
+                <input type="color" id="font-color-picker" value="#E6FF00" style="width: 24px; height: 24px; border: none; cursor: pointer; background: transparent; padding: 0;">
+                <span id="color-hex-display" style="font-family: 'Courier New', monospace; font-size: 11px; color: var(--soft-white); letter-spacing: 1px;">#E6FF00</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
