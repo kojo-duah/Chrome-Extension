@@ -1,0 +1,28 @@
+{
+  "name": "Midnight Theme",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "A dark and elegant theme for your browser",
+
+   "theme": {
+    "colors": {
+      "frame": [0, 7, 27],
+      "toolbar": [1, 18, 48],
+      "tab_text": [112,128,144],
+      "bookmark_text":[38,92,165],
+      "ntp_text": [255,255,255],
+      "tab_background_text": [102, 99, 98],
+      "frame_inactive": [26, 41, 85]
+      
+    },
+    "images": {
+      "theme_ntp_background": "images/theme_ntp_background.png"
+      
+    },
+    "tints" : {
+      "buttons": [0.596, 0.817, 0.506]
+    }
+  }
+  
+
+}

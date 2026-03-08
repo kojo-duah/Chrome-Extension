@@ -1,0 +1,28 @@
+{
+  "name": "Cyber Theme",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "A cyberpunk-inspired theme for your browser",
+
+  "theme": {
+    "colors": {
+      "frame": [16, 13, 35],
+      "toolbar": [55, 41, 99],
+      "tab_text": [245,245,66],
+      "bookmark_text":[197,146,255],
+      "ntp_text": [255,255,255],
+      "tab_background_text": [0, 145, 225],
+      "frame_inactive": [36, 29, 79]
+      
+    },
+    "images": {
+      "theme_ntp_background": "images/theme_ntp_background.jpg"
+      
+    },
+    "tints" : {
+      "buttons": [0.4167, 1, 0.5]
+    }
+  }
+  
+
+}
