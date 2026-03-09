@@ -38,19 +38,6 @@ function openSavedTheme(storageKey) {
   });
 }
 
-function openSavedTheme(storageKey) {
-  chrome.storage.local.get([storageKey], (result) => {
-    const savedUrl = result[storageKey];
-
-    if (!savedUrl) {
-      alert("No saved theme link found.");
-      return;
-    }
-
-    chrome.tabs.create({ url: savedUrl });
-  });
-}
-
 function extractThemeNameFromTabTitle(title) {
   if (!title) return "Saved Theme";
 
