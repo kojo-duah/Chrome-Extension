@@ -3,11 +3,50 @@ const userBtn = document.getElementById("userBtn");
 const lightBtn = document.getElementById("lightBtn");
 const darkBtn = document.getElementById("darkBtn");
 
-const LIGHT_THEME_URL = "https://chromewebstore.google.com/detail/white-theme/eidfmlhkekofhlcimbdfmnbnlmoejdjj";
-const DARK_THEME_URL = "https://chromewebstore.google.com/detail/dark-mode/dmghijelimhndkbmpgbldicpogfkceaj";
 
 function openThemeStorePage(url) {
   window.open(url, "_blank");
+}
+
+function getCurrentTab(callback) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    callback(tabs[0]);
+  });
+}
+
+function isChromeWebStoreThemeUrl(url) {
+  if (!url) return false;
+
+  return (
+    url.startsWith("https://chromewebstore.google.com/detail/") ||
+    url.startsWith("https://chrome.google.com/webstore/detail/")
+  );
+}
+
+function saveCurrentThemeLink(storageKey, successLabel) {
+  getCurrentTab((tab) => {
+    if (!tab || !isChromeWebStoreThemeUrl(tab.url)) {
+      alert("Open a Chrome Web Store theme page first.");
+      return;
+    }
+
+    chrome.storage.local.set({ [storageKey]: tab.url }, () => {
+      alert(`${successLabel} theme link saved.`);
+    });
+  });
+}
+
+function openSavedTheme(storageKey) {
+  chrome.storage.local.get([storageKey], (result) => {
+    const savedUrl = result[storageKey];
+
+    if (!savedUrl) {
+      alert("No saved theme link found.");
+      return;
+    }
+
+    chrome.tabs.create({ url: savedUrl });
+  });
 }
 
 function disableAllThemes(callback) {
@@ -36,8 +75,8 @@ function findThemes() {
 
         themes.forEach(theme => {
             if (
-                theme.name !== "Light Apperance" &&
-                theme.name !== "Dark Apperance"
+                theme.name !== "Light Appearance" &&
+                theme.name !== "Dark Appearance"
             ){
                 userTheme = theme;
             }
@@ -45,7 +84,7 @@ function findThemes() {
 
         if (userTheme) {
             userBtn.textContent = userTheme.name;
-
+            userBtn.disabled = false;
             userBtn.onclick = () => enableThemeById(userTheme.id);
         } else {
             userBtn.textContent = "No User Theme Installed";
@@ -54,11 +93,15 @@ function findThemes() {
 
         lightBtn.textContent = "Save Theme";
         lightBtn.disabled = false;
-        lightBtn.onclick = () => openThemeStorePage(LIGHT_THEME_URL);
+        lightBtn.onclick = () => {
+            saveCurrentThemeLink("savedThemeUrl" , "1");
+        }
 
         darkBtn.textContent = "Save Theme";
         darkBtn.disabled = false;
-        darkBtn.onclick = () => openThemeStorePage(DARK_THEME_URL);
+        darkBtn.onclick = () => {
+            saveCurrentThemeLink("savedThemeUrl" , "1");
+        }
     });
 }
 
