@@ -32,7 +32,8 @@ export default defineConfig([
     plugins: { jest },
     languageOptions: {
       globals: {
-        ...globals.jest
+        ...globals.jest,
+        ...globals.node
       }
     },
     rules: {

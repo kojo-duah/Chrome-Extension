@@ -5,11 +5,6 @@ const darkBtn = document.getElementById("darkBtn");
 const clearLightBtn = document.getElementById("clearLightBtn");
 const clearDarkBtn = document.getElementById("clearDarkBtn");
 
-
-function openThemeStorePage(url) {
-  window.open(url, "_blank");
-}
-
 function getCurrentTab(callback) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     callback(tabs[0]);
