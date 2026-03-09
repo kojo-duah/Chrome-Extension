@@ -3,6 +3,13 @@ const userBtn = document.getElementById("userBtn");
 const lightBtn = document.getElementById("lightBtn");
 const darkBtn = document.getElementById("darkBtn");
 
+const LIGHT_THEME_URL = "https://chromewebstore.google.com/detail/white-theme/eidfmlhkekofhlcimbdfmnbnlmoejdjj";
+const DARK_THEME_URL = "https://chromewebstore.google.com/detail/dark-mode/dmghijelimhndkbmpgbldicpogfkceaj";
+
+function openThemeStorePage(url) {
+  window.open(url, "_blank");
+}
+
 function disableAllThemes(callback) {
     chrome.management.getAll((extensions) => {
         const themes = extensions.filter(ext => ext.type === "theme");
@@ -26,34 +33,32 @@ function findThemes() {
         const themes = extensions.filter(ext => ext.type === "theme");
 
         let userTheme = null;
-        let lightTheme = null;
-        let darkTheme = null;
 
         themes.forEach(theme => {
-            if (theme.name === "Light Appearance") {
-                lightTheme = theme;
-            } else if (theme.name === "Dark Appearance") {
-                darkTheme = theme;
-            } else {
+            if (
+                theme.name !== "Light Apperance" &&
+                theme.name !== "Dark Apperance"
+            ){
                 userTheme = theme;
             }
         });
 
         if (userTheme) {
             userBtn.textContent = userTheme.name;
+
             userBtn.onclick = () => enableThemeById(userTheme.id);
         } else {
             userBtn.textContent = "No User Theme Installed";
             userBtn.disabled = true;
         }
 
-        if (lightTheme) {
-            lightBtn.onclick = () => enableThemeById(lightTheme.id);
-        }
+        lightBtn.textContent = "Save Theme";
+        lightBtn.disabled = false;
+        lightBtn.onclick = () => openThemeStorePage(LIGHT_THEME_URL);
 
-        if (darkTheme) {
-            darkBtn.onclick = () => enableThemeById(darkTheme.id);
-        }
+        darkBtn.textContent = "Save Theme";
+        darkBtn.disabled = false;
+        darkBtn.onclick = () => openThemeStorePage(DARK_THEME_URL);
     });
 }
 
