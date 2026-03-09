@@ -2,6 +2,8 @@ const defaultBtn = document.getElementById("defaultBtn");
 const userBtn = document.getElementById("userBtn");
 const lightBtn = document.getElementById("lightBtn");
 const darkBtn = document.getElementById("darkBtn");
+const clearLightBtn = document.getElementById("clearLightBtn");
+const clearDarkBtn = document.getElementById("clearDarkBtn");
 
 
 function openThemeStorePage(url) {
@@ -23,16 +25,16 @@ function isChromeWebStoreThemeUrl(url) {
   );
 }
 
-function saveCurrentThemeLink(storageKey, successLabel) {
-  getCurrentTab((tab) => {
-    if (!tab || !isChromeWebStoreThemeUrl(tab.url)) {
-      alert("Open a Chrome Web Store theme page first.");
+function openSavedTheme(storageKey) {
+  chrome.storage.local.get([storageKey], (result) => {
+    const savedUrl = result[storageKey];
+
+    if (!savedUrl) {
+      alert("No saved theme link found.");
       return;
     }
 
-    chrome.storage.local.set({ [storageKey]: tab.url }, () => {
-      alert(`${successLabel} theme link saved.`);
-    });
+    chrome.tabs.create({ url: savedUrl });
   });
 }
 
@@ -46,6 +48,54 @@ function openSavedTheme(storageKey) {
     }
 
     chrome.tabs.create({ url: savedUrl });
+  });
+}
+
+function extractThemeNameFromTabTitle(title) {
+  if (!title) return "Saved Theme";
+
+  return title.replace(/\s*-\s*Chrome Web Store\s*$/, "").trim();
+}
+
+function saveThemeAndOpen(urlKey, nameKey) {
+  getCurrentTab((tab) => {
+    if (!tab) {
+      alert("No active tab found.");
+      return;
+    }
+
+    if (isChromeWebStoreThemeUrl(tab.url)) {
+      const themeName = extractThemeNameFromTabTitle(tab.title);
+
+      chrome.storage.local.set(
+        {
+          [urlKey]: tab.url,
+          [nameKey]: themeName
+        },
+        () => {
+          chrome.tabs.create({ url: tab.url });
+          updateSavedThemeLabels();
+        }
+      );
+    } else {
+      openSavedTheme(urlKey);
+    }
+  });
+}
+
+function updateSavedThemeLabels() {
+  chrome.storage.local.get(
+    ["savedWhiteThemeName", "savedBlackThemeName"],
+    (result) => {
+      lightBtn.textContent = result.savedWhiteThemeName || "Save Theme";
+      darkBtn.textContent = result.savedBlackThemeName || "Save Theme";
+    }
+  );
+}
+
+function clearSavedTheme(urlKey, nameKey) {
+  chrome.storage.local.remove([urlKey, nameKey], () => {
+    updateSavedThemeLabels();
   });
 }
 
@@ -91,20 +141,28 @@ function findThemes() {
             userBtn.disabled = true;
         }
 
-        lightBtn.textContent = "Save Theme";
         lightBtn.disabled = false;
         lightBtn.onclick = () => {
-            saveCurrentThemeLink("savedThemeUrl" , "1");
+            saveThemeAndOpen("savedWhiteThemeUrl" , "savedWhiteThemeName");
         }
 
-        darkBtn.textContent = "Save Theme";
         darkBtn.disabled = false;
         darkBtn.onclick = () => {
-            saveCurrentThemeLink("savedThemeUrl" , "1");
+            saveThemeAndOpen("savedBlackThemeUrl" , "savedBlackThemeName");
         }
     });
+
+    updateSavedThemeLabels();
 }
 
 defaultBtn.onclick = () => disableAllThemes();
+
+clearLightBtn.onclick = () => {
+  clearSavedTheme("savedWhiteThemeUrl", "savedWhiteThemeName");
+};
+
+clearDarkBtn.onclick = () => {
+  clearSavedTheme("savedBlackThemeUrl", "savedBlackThemeName");
+};
 
 findThemes();

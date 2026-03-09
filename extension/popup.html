@@ -16,6 +16,24 @@
             margin-bottom: 8px;
             cursor: pointer;
         }
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .theme-row button:first-child {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .clear-btn {
+            width: 32px;
+            padding: 8px 0;
+            margin-bottom: 0;
+            flex: 0 0 32px;
+        }
     </style>
 </head>
 
@@ -25,8 +43,16 @@
 
     <button id="defaultBtn">Default</button>
     <button id="userBtn">User Theme</button>
-    <button id="lightBtn">White</button>
-    <button id="darkBtn">Black</button>
+
+    <div class="theme-row">
+        <button id="lightBtn">White</button>
+        <button id="clearLightBtn" class="clear-btn" title="Clear saved white theme">×</button>
+    </div>
+
+    <div class="theme-row">
+        <button id="darkBtn">Black</button>
+        <button id="clearDarkBtn" class="clear-btn" title="Clear saved black theme">×</button>
+    </div>
 
     <script src="popup.js"></script>
 </body>
