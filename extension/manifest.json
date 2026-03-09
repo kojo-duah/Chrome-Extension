@@ -3,7 +3,7 @@
   "name": "Theme Toggle",
   "version": "1.0",
   "permissions": [
-    "management"
+    "management", "storage", "tabs"
   ],
   "action": {
     "default_popup": "popup.html",

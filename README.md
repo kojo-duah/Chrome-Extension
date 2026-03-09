@@ -1,4 +1,3 @@
-# Chrome-Extension
-SW Dev 3250 Class 
- console.log
- Test commit from Lifu on Feb 4, 2026
+Chrome-Extension Project: Theme Toggle
+SW Dev 3250 Class Spring 2026 Group 2
+Members: Antonio Estrada, Benjamin Chairez, Brian Escobar, Joel Duah, Lifu Deng
