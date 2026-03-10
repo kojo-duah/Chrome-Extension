@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 
+<!--
+  popup.html
+  Popup UI for the Chrome Theme Switcher extension.
+
+  This file defines the popup interface shown when the extension icon is clicked.
+  Buttons in this file are referenced in popup.js using their element IDs.
+-->
+
 <head>
     <meta charset="UTF-8">
     <style>
@@ -45,13 +53,13 @@
     <button id="userBtn">User Theme</button>
 
     <div class="theme-row">
-        <button id="lightBtn">White</button>
-        <button id="clearLightBtn" class="clear-btn" title="Clear saved white theme">×</button>
+        <button id="firstBtn">First</button>
+        <button id="clearFirstBtn" class="clear-btn" title="Clear saved first theme">×</button>
     </div>
 
     <div class="theme-row">
-        <button id="darkBtn">Black</button>
-        <button id="clearDarkBtn" class="clear-btn" title="Clear saved black theme">×</button>
+        <button id="secondBtn">Second</button>
+        <button id="clearSecondBtn" class="clear-btn" title="Clear saved second theme">×</button>
     </div>
 
     <script src="popup.js"></script>
