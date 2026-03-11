@@ -5,6 +5,14 @@ import jest from "eslint-plugin-jest";
 
 
 export default defineConfig([
+  //IGNORE FOLDERS/FILES
+  {
+    ignores: [
+      "docs/**",
+      "coverage/**",
+      "node_modules/**"
+    ]
+  },
   // Application / extension code
   {
     files: ["**/*.{js,mjs,cjs}"],

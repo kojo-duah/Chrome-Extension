@@ -1,3 +1,4 @@
+/* global module */
 /** @type {HTMLButtonElement | null} */
 const defaultBtn = document.getElementById("defaultBtn");
 
@@ -112,8 +113,12 @@ function updateSavedThemeLabels() {
   chrome.storage.local.get(
     ["savedFirstThemeName", "savedSecondThemeName"],
     (result) => {
-      firstBtn.textContent = result.savedFirstThemeName || "Save Theme";
-      secondBtn.textContent = result.savedSecondThemeName || "Save Theme";
+      if (firstBtn) {
+        firstBtn.textContent = result.savedFirstThemeName || "Save Theme";
+      }
+      if (secondBtn) {
+        secondBtn.textContent = result.savedSecondThemeName || "Save Theme";
+      }
     }
   );
 }
@@ -178,24 +183,29 @@ function findThemes() {
             }
         });
 
-        if (userTheme) {
+        if (userBtn) {
+          if (userTheme) {
             userBtn.textContent = userTheme.name;
             userBtn.disabled = false;
             userBtn.onclick = () => enableThemeById(userTheme.id);
         } else {
             userBtn.textContent = "No User Theme Installed";
             userBtn.disabled = true;
+          }
         }
-
-        firstBtn.disabled = false;
-        firstBtn.onclick = () => {
+        if (firstBtn) {
+          firstBtn.disabled = false;
+          firstBtn.onclick = () => {
             saveThemeAndOpen("savedFirstThemeUrl" , "savedFirstThemeName");
+         };
         }
-
-        secondBtn.disabled = false;
-        secondBtn.onclick = () => {
+        if (secondBtn) {
+          secondBtn.disabled = false;
+          secondBtn.onclick = () => {
             saveThemeAndOpen("savedSecondThemeUrl" , "savedSecondThemeName");
+          };
         }
+        
     });
 
     updateSavedThemeLabels();
@@ -205,26 +215,49 @@ function findThemes() {
  * Handles the default theme button click by disabling all themes.
  * @returns {void}
  */
-defaultBtn.onclick = () => disableAllThemes();
+if (defaultBtn) {
+  defaultBtn.onclick = () => disableAllThemes();
+}
 
 /**
  * Handles the clear first theme button click.
  * @returns {void}
  */
-clearFirstBtn.onclick = () => {
+if (clearFirstBtn) {
+  clearFirstBtn.onclick = () => {
   clearSavedTheme("savedFirstThemeUrl", "savedFirstThemeName");
 };
+}
 
 /**
  * Handles the clear second theme button click.
  * @returns {void}
  */
-clearSecondBtn.onclick = () => {
+if (clearSecondBtn) {
+  clearSecondBtn.onclick = () => {
   clearSavedTheme("savedSecondThemeUrl", "savedSecondThemeName");
 };
+}
 
 /**
  * Initializes popup theme controls when the popup is opened.
  * @returns {void}
  */
-findThemes();
+if (typeof chrome !== "undefined" && typeof document !== "undefined") {
+  findThemes();
+}
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    getCurrentTab,
+    isChromeWebStoreThemeUrl,
+    openSavedTheme,
+    extractThemeNameFromTabTitle,
+    saveThemeAndOpen,
+    updateSavedThemeLabels,
+    clearSavedTheme,
+    disableAllThemes,
+    enableThemeById,
+    findThemes
+  };
+}

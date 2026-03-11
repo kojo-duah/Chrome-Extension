@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint extension __tests__",
     "test": "jest",
     "coverage": "jest --coverage",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint extension __tests__ --fix",
     "docs": "jsdoc -c jsdoc.json"
   },
   "keywords": [],
