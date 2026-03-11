@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
+    "coverage": "jest --coverage",
     "lint:fix": "eslint . --fix",
     "docs": "jsdoc -c jsdoc.json"
   },
@@ -241,5 +242,29 @@
     "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1",
     "yocto-queue": "^0.1.0"
+  },
+  "jest": {
+  "collectCoverage": true,
+  "coverageProvider": "v8",
+  "collectCoverageFrom": [
+    "**/*.js",
+    "!**/__tests__/**",
+    "!**/node_modules/**",
+    "!**/coverage/**",
+    "!**/jest.config.js",
+    "!**/eslint.config.js"
+  ],
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "/coverage/"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 90,
+      "functions": 90,
+      "lines": 90,
+      "statements": 90
+      }
+    }
   }
 }
