@@ -1,16 +1,37 @@
+/** @type {HTMLButtonElement | null} */
 const defaultBtn = document.getElementById("defaultBtn");
-const userBtn = document.getElementById("userBtn");
-const lightBtn = document.getElementById("lightBtn");
-const darkBtn = document.getElementById("darkBtn");
-const clearLightBtn = document.getElementById("clearLightBtn");
-const clearDarkBtn = document.getElementById("clearDarkBtn");
 
+/** @type {HTMLButtonElement | null} */
+const userBtn = document.getElementById("userBtn");
+
+/** @type {HTMLButtonElement | null} */
+const firstBtn = document.getElementById("firstBtn");
+
+/** @type {HTMLButtonElement | null} */
+const secondBtn = document.getElementById("secondBtn");
+
+/** @type {HTMLButtonElement | null} */
+const clearFirstBtn = document.getElementById("clearFirstBtn");
+
+/** @type {HTMLButtonElement | null} */
+const clearSecondBtn = document.getElementById("clearSecondBtn");
+
+/**
+ * Gets the currently active tab in the current window.
+ * @param {function(object): void} callback - Callback function that receives the active tab.
+ * @returns {void}
+ */
 function getCurrentTab(callback) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     callback(tabs[0]);
   });
 }
 
+/**
+ * Checks whether a URL belongs to the Chrome Web Store.
+ * @param {string} url - The URL to check.
+ * @returns {boolean} True if the URL is a Chrome Web Store theme page, otherwise false.
+ */
 function isChromeWebStoreThemeUrl(url) {
   if (!url) return false;
 
@@ -20,6 +41,12 @@ function isChromeWebStoreThemeUrl(url) {
   );
 }
 
+
+/**
+ * Opens a previously saved theme URL from Chrome local storage.
+ * @param {string} storageKey - The storage key containing the saved theme URL.
+ * @returns {void}
+ */
 function openSavedTheme(storageKey) {
   chrome.storage.local.get([storageKey], (result) => {
     const savedUrl = result[storageKey];
@@ -33,12 +60,24 @@ function openSavedTheme(storageKey) {
   });
 }
 
+/**
+ * Extracts the theme name from a Chrome Web Store tab title.
+ * @param {string} title - The tab title to parse.
+ * @returns {string} The cleaned theme name or a default fallback name.
+ */
 function extractThemeNameFromTabTitle(title) {
   if (!title) return "Saved Theme";
 
   return title.replace(/\s*-\s*Chrome Web Store\s*$/, "").trim();
 }
 
+/**
+ * Saves the current theme URL and name to Chrome local storage, then opens it.
+ * If the current tab is not a Chrome Web Store theme page, it opens the previously saved theme.
+ * @param {string} urlKey - The storage key used for the theme URL.
+ * @param {string} nameKey - The storage key used for the theme name.
+ * @returns {void}
+ */
 function saveThemeAndOpen(urlKey, nameKey) {
   getCurrentTab((tab) => {
     if (!tab) {
@@ -65,22 +104,37 @@ function saveThemeAndOpen(urlKey, nameKey) {
   });
 }
 
+/**
+ * Updates the saved theme button labels using names stored in Chrome local storage.
+ * @returns {void}
+ */
 function updateSavedThemeLabels() {
   chrome.storage.local.get(
-    ["savedWhiteThemeName", "savedBlackThemeName"],
+    ["savedFirstThemeName", "savedSecondThemeName"],
     (result) => {
-      lightBtn.textContent = result.savedWhiteThemeName || "Save Theme";
-      darkBtn.textContent = result.savedBlackThemeName || "Save Theme";
+      firstBtn.textContent = result.savedFirstThemeName || "Save Theme";
+      secondBtn.textContent = result.savedSecondThemeName || "Save Theme";
     }
   );
 }
 
+/**
+ * Removes a saved theme URL and name from Chrome local storage.
+ * @param {string} urlKey - The storage key for the saved theme URL.
+ * @param {string} nameKey - The storage key for the saved theme name.
+ * @returns {void}
+ */
 function clearSavedTheme(urlKey, nameKey) {
   chrome.storage.local.remove([urlKey, nameKey], () => {
     updateSavedThemeLabels();
   });
 }
 
+/**
+ * Disables all installed Chrome themes.
+ * @param {function(Array<object>): void} [callback] - Optional callback that receives the list of disabled themes.
+ * @returns {void}
+ */
 function disableAllThemes(callback) {
     chrome.management.getAll((extensions) => {
         const themes = extensions.filter(ext => ext.type === "theme");
@@ -93,12 +147,22 @@ function disableAllThemes(callback) {
     });
 }
 
+/**
+ * Enables a specific theme by its extension ID after disabling all other themes.
+ * @param {string} id - The extension ID of the theme to enable.
+ * @returns {void}
+ */
 function enableThemeById(id) {
     disableAllThemes(() => {
         chrome.management.setEnabled(id, true);
     });
 }
 
+/**
+ * Finds installed Chrome themes and updates the popup buttons accordingly.
+ * Assigns click handlers for user, first, and second theme actions.
+ * @returns {void}
+ */
 function findThemes() {
     chrome.management.getAll((extensions) => {
         const themes = extensions.filter(ext => ext.type === "theme");
@@ -107,8 +171,8 @@ function findThemes() {
 
         themes.forEach(theme => {
             if (
-                theme.name !== "Light Appearance" &&
-                theme.name !== "Dark Appearance"
+                theme.name !== "First Appearance" &&
+                theme.name !== "Second Appearance"
             ){
                 userTheme = theme;
             }
@@ -123,28 +187,44 @@ function findThemes() {
             userBtn.disabled = true;
         }
 
-        lightBtn.disabled = false;
-        lightBtn.onclick = () => {
-            saveThemeAndOpen("savedWhiteThemeUrl" , "savedWhiteThemeName");
+        firstBtn.disabled = false;
+        firstBtn.onclick = () => {
+            saveThemeAndOpen("savedFirstThemeUrl" , "savedFirstThemeName");
         }
 
-        darkBtn.disabled = false;
-        darkBtn.onclick = () => {
-            saveThemeAndOpen("savedBlackThemeUrl" , "savedBlackThemeName");
+        secondBtn.disabled = false;
+        secondBtn.onclick = () => {
+            saveThemeAndOpen("savedSecondThemeUrl" , "savedSecondThemeName");
         }
     });
 
     updateSavedThemeLabels();
 }
 
+/**
+ * Handles the default theme button click by disabling all themes.
+ * @returns {void}
+ */
 defaultBtn.onclick = () => disableAllThemes();
 
-clearLightBtn.onclick = () => {
-  clearSavedTheme("savedWhiteThemeUrl", "savedWhiteThemeName");
+/**
+ * Handles the clear first theme button click.
+ * @returns {void}
+ */
+clearFirstBtn.onclick = () => {
+  clearSavedTheme("savedFirstThemeUrl", "savedFirstThemeName");
 };
 
-clearDarkBtn.onclick = () => {
-  clearSavedTheme("savedBlackThemeUrl", "savedBlackThemeName");
+/**
+ * Handles the clear second theme button click.
+ * @returns {void}
+ */
+clearSecondBtn.onclick = () => {
+  clearSavedTheme("savedSecondThemeUrl", "savedSecondThemeName");
 };
 
+/**
+ * Initializes popup theme controls when the popup is opened.
+ * @returns {void}
+ */
 findThemes();

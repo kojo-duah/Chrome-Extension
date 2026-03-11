@@ -1,0 +1,10 @@
+{
+  "source": {
+    "include": ["extension"],
+    "exclude": ["node_modules", "__tests__"]
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true
+  }
+}

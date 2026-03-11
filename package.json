@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "keywords": [],
   "author": "",
