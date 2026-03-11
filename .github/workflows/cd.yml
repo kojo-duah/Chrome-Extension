@@ -1,0 +1,49 @@
+name: CD - Package Extension
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Create release folder
+        run: mkdir -p release
+
+      - name: Package extension
+        run: |
+          zip -r release/extension.zip . \
+            -x ".git/*" \
+               ".github/*" \
+               "node_modules/*" \
+               "__tests__/*" \
+               "coverage/*" \
+               "*.md" \
+               "package.json" \
+               "package-lock.json" \
+               ".gitignore" \
+               ".DS_Store"
+
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-package
+          path: release/extension.zip

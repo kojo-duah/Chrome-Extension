@@ -3,15 +3,15 @@
   "name": "Theme Toggle",
   "version": "1.0",
   "permissions": [
-    "management"
+    "management", "storage", "tabs"
   ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "hello_extensions.png"
+      "16": "iconv1.png"
     }
   },
   "icons": {
-    "16": "hello_extensions.png"
+    "16": "iconv1.png"
   }
 }
