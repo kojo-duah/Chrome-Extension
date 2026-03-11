@@ -1,72 +1,48 @@
 /**
  * background.js
- * Handles automatic theme rotation
+ * 
+ * Background script for the Chrome Theme Switcher extension.
+ * Handles automatic theme rotation using Chrome alarms API.
  */
 
 /**
- * Calculates next theme index
- */
-function getNextThemeIndex(currentIndex, total) {
-    if (total === 0) return -1;
-
-    if (currentIndex === -1) {
-        return 0;
-    }
-
-    return (currentIndex + 1) % total;
-}
-
-
-/**
- * Rotates themes given extension list
- */
-function rotateThemes(extensions) {
-
-    const themes = extensions.filter(ext => ext.type === "theme");
-
-    if (themes.length === 0) return;
-
-    const enabledTheme = themes.find(t => t.enabled);
-
-    let currentIndex = themes.findIndex(
-        t => t.id === enabledTheme?.id
-    );
-
-    const nextIndex = getNextThemeIndex(
-        currentIndex,
-        themes.length
-    );
-
-    themes.forEach(t => {
-        chrome.management.setEnabled(t.id, false);
-    });
-
-    chrome.management.setEnabled(
-        themes[nextIndex].id,
-        true
-    );
-}
-
-
-/**
- * Alarm listener
+ * Alarm listener used to rotate installed Chrome themes.
+ * Triggered when the "rotateTheme" alarm fires.
  */
 chrome.alarms.onAlarm.addListener((alarm) => {
-
+    /**
+   * Handles alarm events.
+   * @param {chrome.alarms.Alarm} alarm - Alarm object fired by Chrome.
+   */
     if (alarm.name === "rotateTheme") {
 
+        /**
+         * Retrieves all installed extensions and filters themes.
+         * @param {Array<object>} extensions - List of installed extensions.
+         */
         chrome.management.getAll((extensions) => {
-            rotateThemes(extensions);
+
+            const themes = extensions.filter(ext => ext.type === "theme");
+
+            if (themes.length === 0) return;
+
+            const enabledTheme = themes.find(t => t.enabled);
+
+            let currentIndex = themes.findIndex(t => t.id === enabledTheme?.id);
+
+            if (currentIndex === -1) {
+                currentIndex = 0;
+            }
+
+            const nextIndex = (currentIndex + 1) % themes.length;
+
+            // Disable all
+            themes.forEach(t => {
+                chrome.management.setEnabled(t.id, false);
+            });
+
+            // Enable next
+            chrome.management.setEnabled(themes[nextIndex].id, true);
         });
-
     }
-
 });
-
-
-if (typeof module !== "undefined") {
-    module.exports = {
-        getNextThemeIndex,
-        rotateThemes
-    };
-}
