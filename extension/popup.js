@@ -16,6 +16,9 @@ const clearFirstBtn = document.getElementById("clearFirstBtn");
 /** @type {HTMLButtonElement | null} */
 const clearSecondBtn = document.getElementById("clearSecondBtn");
 
+/** @type {HTMLButtonElement | null} */
+const storeBtn = document.getElementById("storeBtn");
+
 /**
  * Gets the currently active tab in the current window.
  * @param {function(object): void} callback - Callback function that receives the active tab.
@@ -159,6 +162,15 @@ function enableThemeById(id) {
 }
 
 /**
+ * Opens Chrome Web Store
+ */
+function openChromeStore() {
+  chrome.tabs.create({
+    url: "https://chromewebstore.google.com/category/themes"
+  });
+}
+
+/**
  * Finds installed Chrome themes and updates the popup buttons accordingly.
  * Assigns click handlers for user, first, and second theme actions.
  * @returns {void}
@@ -222,6 +234,13 @@ clearFirstBtn.onclick = () => {
 clearSecondBtn.onclick = () => {
   clearSavedTheme("savedSecondThemeUrl", "savedSecondThemeName");
 };
+
+/**
+ * Handles the Chrome Web Store button click.
+ * Opens the Chrome Web Store themes page in a new tab.
+ * @returns {void}
+ */
+storeBtn.onclick = () => openChromeStore();
 
 /**
  * Initializes popup theme controls when the popup is opened.
