@@ -205,4 +205,53 @@ describe("popup.js", () => {
     expect(buttons.userBtn.textContent).toBe("No User Theme Installed");
     expect(buttons.userBtn.disabled).toBe(true);
   });
+  test("getCurrentTab calls chrome.tabs.query", () => {
+
+  chrome.tabs.query.mockImplementation((opts, cb) => {
+    cb([{ id: 1 }]);
+  });
+
+  popup.getCurrentTab(() => {});
+
+  expect(chrome.tabs.query).toHaveBeenCalled();
+
+});
+
+
+test("saveThemeAndOpen opens saved when not store URL", () => {
+
+  chrome.tabs.query.mockImplementation((opts, cb) => {
+    cb([{ url: "https://google.com", title: "Google" }]);
+  });
+
+  chrome.storage.local.get.mockImplementation((k, cb) => {
+    cb({ savedFirstThemeUrl: "https://chromewebstore.google.com/detail/a" });
+  });
+
+  popup.saveThemeAndOpen(
+    "savedFirstThemeUrl",
+    "savedFirstThemeName"
+  );
+
+  expect(chrome.tabs.create).toHaveBeenCalled();
+
+});
+
+
+test("enableThemeById enables theme", () => {
+
+  chrome.management.getAll.mockImplementation(cb => {
+    cb([
+      { id: "a", type: "theme" },
+      { id: "b", type: "theme" }
+    ]);
+  });
+
+  popup.enableThemeById("b");
+
+  expect(
+    chrome.management.setEnabled
+  ).toHaveBeenCalled();
+
+});
 });
