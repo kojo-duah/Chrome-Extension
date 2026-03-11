@@ -251,6 +251,7 @@
     "!**/__tests__/**",
     "!**/node_modules/**",
     "!**/coverage/**",
+    "!**/docs/**",
     "!**/jest.config.js",
     "!**/eslint.config.js"
   ],
